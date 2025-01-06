@@ -16,7 +16,16 @@ def search_book():
     try:
         driver.get("https://www.bookxcess.com")
         # waiting for prompt to process any key
-        input("Press any key to continue...")
+        driver.find_element(By.CSS_SELECTOR, ".user_labels").click()
+        # <a href="/account/login" class="button">Sign In</a>
+        driver.find_element(By.CSS_SELECTOR, ".h_accont_dropdown a.button").click()
+        time.sleep(2)
+        driver.find_element(By.CSS_SELECTOR, "input[type='email']").send_keys("tankarhau@gmail.com")
+        driver.find_element(By.CSS_SELECTOR, "input[type='password']").send_keys("K@rhau5433")
+        # send key enter
+        driver.find_element(By.CSS_SELECTOR, "input[type='password']").send_keys(Keys.RETURN)
+        time.sleep(2)
+
         for title, author in titles_and_authors:
             search_box = driver.find_element(By.CSS_SELECTOR, "input[name='q']")
             if len(title) < 15:
