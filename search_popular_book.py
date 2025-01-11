@@ -3,15 +3,13 @@ from bs4 import BeautifulSoup
 import csv
 from datetime import datetime
 import re
-
-from matplotlib.pylab import f
 from read_csv_goodread import get_to_read_titles
-import time
 import random
 import concurrent.futures
 
 titles_and_authors = get_to_read_titles('data/goodreads_library_export.csv')
 random.shuffle(titles_and_authors)
+scraper = cloudscraper.create_scraper()
 
 def format_search_query(query):
     # Limit to 10 words
@@ -26,7 +24,6 @@ def format_search_query(query):
 def search_books(search_term):
     search_query = format_search_query(search_term)
     url = f"https://www.popularonline.com.my/default/catalogsearch/result/index/?q={search_query}&mode=grid&category_id=5897&language_code=&searchby=&customer_review=&fprice=&tprice=&order=&dir=&stock=&did="
-    scraper = cloudscraper.create_scraper()
     response = scraper.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
 
@@ -76,7 +73,7 @@ def search_books(search_term):
 def main():
     for i in range(0, len(titles_and_authors), 10):
         batch = titles_and_authors[i:i+10]
-        with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
             futures = [executor.submit(search_books, title) for title, author in batch]
             for future in concurrent.futures.as_completed(futures):
                 try:

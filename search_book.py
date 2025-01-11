@@ -16,6 +16,8 @@ def search_book():
     try:
         driver.get("https://www.bookxcess.com")
         # waiting for prompt to process any key
+        # change to full screen
+        driver.maximize_window()
         driver.find_element(By.CSS_SELECTOR, ".user_labels").click()
         # <a href="/account/login" class="button">Sign In</a>
         driver.find_element(By.CSS_SELECTOR, ".h_accont_dropdown a.button").click()
